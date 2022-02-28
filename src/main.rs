@@ -7,24 +7,37 @@ fn main() {
     let mut shift = args[2]
         .trim()
         .parse::<isize>()
-        .expect("error: please input a  number as second arg"); 
+        .expect("error: please input a  number as second arg");
     const ALPHA: &str = "abcdefghijklmnopqrstuvwxyz";
     const SHIFT_MAX: isize = 25;
-    const SHIFT_MIN: isize = -25;
-    for mut chr in text.chars() {
+    const SHIFT_MIN: isize = -26;
+    'charloop: for mut chr in text.chars() {
         if chr.is_alphanumeric() {
             chr.make_ascii_lowercase();
-            for (i , al) in ALPHA.chars().enumerate() {
-                if chr==al{
-                    while((shift+i as isize)>SHIFT_MAX) || (shift+i as isize)<SHIFT_MIN{
-                        if shift+i as isize > SHIFT_MAX{
-                            shift = (shift+i as isize) - SHIFT_MAX;
+            for (i, al) in ALPHA.chars().enumerate() {
+                println!("{} {} {} {}", chr, al, i, shift);
+                if chr == al {
+                    while ((shift + i as isize) > SHIFT_MAX) || (shift + i as isize) < SHIFT_MIN {
+                        if shift + i as isize > SHIFT_MAX {
+                            println!(
+                                "{}",
+                                ALPHA
+                                    .chars()
+                                    .nth(((shift as usize + i) % SHIFT_MAX as usize) - 1)
+                                    .expect("")
+                            );
+                            continue 'charloop;
+                        } else if shift + i as isize > SHIFT_MIN {
+                            println!(
+                                "{}",
+                                ALPHA
+                                    .chars()
+                                    .nth(((shift as usize + i) % SHIFT_MIN as usize))
+                                    .expect("")
+                            );
                         }
-                        else if shift+i as isize > SHIFT_MIN{
-                            shift = (shift+i as isize) - SHIFT_MIN;
-                        }
-                        chr = ALPHA.chars().nth(shift+i).expect("error: could not convert char to int");
                     }
+                    //println!("{}",ALPHA.chars().nth(shift as usize+i).expect("error: could not convert to char"));
                 }
             }
         }
