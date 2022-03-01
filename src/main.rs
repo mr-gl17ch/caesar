@@ -22,28 +22,26 @@ fn shift_text(text: &String, shift: isize) -> String {
     for mut chr in text.chars() {
         if chr.is_alphanumeric() {
             chr.make_ascii_lowercase();
-            if shift.is_positive() {
-                for (i, al) in ALPHA.chars().enumerate() {
-                    if chr == al {
-                        if shift + i as isize > SHIFT_MAX {
-                            if chr != 'z' {
-                                text_to_shift.push(
-                                    ALPHA
-                                        .chars()
-                                        .nth(((shift as usize + i) % SHIFT_MAX as usize) - 1)
-                                        .expect(""),
-                                );
-                            } else {
-                                text_to_shift.push(
-                                    ALPHA
-                                        .chars()
-                                        .nth((shift as usize + i) % SHIFT_MAX as usize)
-                                        .expect(""),
-                                );
-                            }
+            for (i, al) in ALPHA.chars().enumerate() {
+                if chr == al {
+                    if shift + i as isize > SHIFT_MAX {
+                        if chr != 'z' {
+                            text_to_shift.push(
+                                ALPHA
+                                    .chars()
+                                    .nth(((shift as usize + i) % SHIFT_MAX as usize) - 1)
+                                    .expect(""),
+                            );
                         } else {
-                            println!("{}", ALPHA.chars().nth(shift as usize + i).expect(""));
+                            text_to_shift.push(
+                                ALPHA
+                                    .chars()
+                                    .nth((shift as usize + i) % SHIFT_MAX as usize)
+                                    .expect(""),
+                            );
                         }
+                    } else {
+                        text_to_shift.push(ALPHA.chars().nth(shift as usize + i).expect("could not shift"));
                     }
                 }
             }
